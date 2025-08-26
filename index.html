@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>FamilyChat</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Firebase App (SDK v9) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <!-- Экран загрузки -->
+    <div class="splash-screen" id="splashScreen">
+        <div class="splash-logo">💬</div>
+        <div class="splash-title">FamilyChat</div>
+        <div class="splash-subtitle">Семейный мессенджер</div>
+    </div>
+    
+<!-- Экран регистрации -->
+<div class="auth-screen" id="authScreen" style="display: none;">
+    <div class="auth-container">
+        <div class="auth-logo">💬</div>
+        <h2>FamilyChat</h2>
+        <p>Войдите в свой аккаунт</p>
+        <form id="authForm">
+            <input type="text" id="authName" placeholder="Ваше имя" required>
+            <input type="password" id="authPassword" placeholder="Пароль" required>
+            <button type="submit" class="btn btn-primary">Войти</button>
+        </form>
+        <div class="auth-footer">
+            <p><a href="#" id="createAccountLink">Создайте аккаунт</a></p>
+        </div>
+    </div>
+</div>
+    
+    <!-- Главное приложение -->
+    <div class="app" id="app" style="display: none;">
+        <!-- Заголовок чата -->
+        <header class="chat-header" id="chatHeader">
+            <button class="back-btn" id="backBtn">←</button>
+            <div class="chat-info">
+                <div class="chat-avatar" id="chatAvatar">⭐</div>
+                <div class="chat-details">
+                    <div class="chat-name" id="chatName">Избранное</div>
+                    <div class="chat-status" id="chatStatus">Список друзей</div>
+                </div>
+            </div>
+            <div class="chat-actions">
+                <button class="action-btn call-btn" id="callBtn">📞</button>
+                <button class="action-btn video-btn" id="videoBtn">📹</button>
+            </div>
+        </header>
+        <!-- Список контактов -->
+        <div class="contacts-screen" id="contactsScreen">
+            <div class="contacts-header">
+                <div class="user-profile">
+                    <div class="user-avatar" id="userAvatar">А</div>
+                    <div class="user-info">
+                        <div class="user-name" id="userName">Анна Петрова</div>
+                        <div class="user-status" id="userStatus">В сети</div>
+                    </div>
+                </div>
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Поиск..." id="searchInput">
+                    <div class="search-icon">🔍</div>
+                </div>
+                <div class="tabs">
+                    <button class="tab active" data-tab="chats">Чаты</button>
+                    <button class="tab" data-tab="friends">Друзья</button>
+                </div>
+            </div>
+            <div class="contacts-list" id="contactsList">
+                <!-- Контакты будут добавлены динамически -->
+                <div class="contact-item" data-contact="favorite">
+                    <div class="contact-avatar">⭐</div>
+                    <div class="contact-info">
+                        <div class="contact-name">Избранное</div>
+                        <div class="contact-last-message">Добавьте друзей</div>
+                    </div>
+                    <div class="contact-meta">
+                        <div class="contact-time">Сейчас</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Кнопка добавления друга -->
+            <button class="fab" id="addFriendBtn">+</button>
+        </div>
+        <!-- Экран чата -->
+        <div class="chat-screen" id="chatScreen" style="display: none;">
+            <div class="messages-container" id="messagesContainer">
+                <!-- Сообщения будут добавлены динамически -->
+            </div>
+            <!-- Область ввода сообщения -->
+            <div class="message-input-container">
+                <button class="attach-btn" id="attachBtn">📎</button>
+                <div class="input-wrapper">
+                    <textarea class="message-input" placeholder="Сообщение..." id="messageInput" rows="1"></textarea>
+                    <button class="emoji-btn" id="emojiBtn">😊</button>
+                </div>
+                <button class="send-btn" id="sendBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M2 21l21-9L2 3v7l15 2-15 2v7z" fill="currentColor"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- Модальное окно добавления друга -->
+    <div class="modal" id="addFriendModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Добавить друга</h3>
+                <button class="close-btn" id="closeModalBtn">×</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="friendUsername" placeholder="Имя пользователя" class="modal-input">
+                <input type="text" id="friendCode" placeholder="Код приглашения" class="modal-input">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelBtn">Отмена</button>
+                <button class="btn btn-primary" id="addBtn">Добавить</button>
+            </div>
+        </div>
+    </div>
+    <!-- Уведомления -->
+    <div class="notification" id="notification">
+        <div class="notification-content" id="notificationContent"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

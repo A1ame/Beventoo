@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>FamilyChat</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Экран загрузки -->
+    <div class="splash-screen" id="splashScreen">
+        <div class="splash-logo">💬</div>
+        <div class="splash-title">FamilyChat</div>
+        <div class="splash-subtitle">Семейный мессенджер</div>
+    </div>
+
+    <!-- Главное приложение -->
+    <div class="app" id="app" style="display: none;">
+        <!-- Заголовок чата -->
+        <header class="chat-header" id="chatHeader">
+            <button class="back-btn" id="backBtn">←</button>
+            <div class="chat-info">
+                <div class="chat-avatar" id="chatAvatar">М</div>
+                <div class="chat-details">
+                    <div class="chat-name" id="chatName">Мама</div>
+                    <div class="chat-status" id="chatStatus">В сети</div>
+                </div>
+            </div>
+            <div class="chat-actions">
+                <button class="action-btn call-btn" id="callBtn">📞</button>
+                <button class="action-btn video-btn" id="videoBtn">📹</button>
+            </div>
+        </header>
+
+        <!-- Список контактов -->
+        <div class="contacts-screen" id="contactsScreen">
+            <div class="contacts-header">
+                <div class="user-profile">
+                    <div class="user-avatar">А</div>
+                    <div class="user-info">
+                        <div class="user-name">Анна Петрова</div>
+                        <div class="user-status">В сети</div>
+                    </div>
+                </div>
+                
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Поиск..." id="searchInput">
+                    <div class="search-icon">🔍</div>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab active" data-tab="chats">Чаты</button>
+                    <button class="tab" data-tab="friends">Друзья</button>
+                </div>
+            </div>
+
+            <div class="contacts-list" id="contactsList">
+                <div class="contact-item" data-contact="mom">
+                    <div class="contact-avatar">М</div>
+                    <div class="contact-info">
+                        <div class="contact-name">Мама</div>
+                        <div class="contact-last-message">Как дела?</div>
+                    </div>
+                    <div class="contact-meta">
+                        <div class="contact-time">14:30</div>
+                        <div class="unread-badge">2</div>
+                    </div>
+                </div>
+                
+                <div class="contact-item" data-contact="dad">
+                    <div class="contact-avatar">П</div>
+                    <div class="contact-info">
+                        <div class="contact-name">Папа</div>
+                        <div class="contact-last-message">Увидимся завтра</div>
+                    </div>
+                    <div class="contact-meta">
+                        <div class="contact-time">13:45</div>
+                    </div>
+                </div>
+                
+                <div class="contact-item" data-contact="sister">
+                    <div class="contact-avatar">К</div>
+                    <div class="contact-info">
+                        <div class="contact-name">Катя (сестра)</div>
+                        <div class="contact-last-message">😄</div>
+                    </div>
+                    <div class="contact-meta">
+                        <div class="contact-time">12:20</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Кнопка добавления друга -->
+            <button class="fab" id="addFriendBtn">+</button>
+        </div>
+
+        <!-- Экран чата -->
+        <div class="chat-screen" id="chatScreen" style="display: none;">
+            <div class="messages-container" id="messagesContainer">
+                <div class="message incoming">
+                    <div class="message-content">
+                        <div class="message-text">Привет! Как дела?</div>
+                        <div class="message-time">14:25</div>
+                    </div>
+                </div>
+                
+                <div class="message outgoing">
+                    <div class="message-content">
+                        <div class="message-text">Привет, мам! Все хорошо, работаю 😊</div>
+                        <div class="message-time">14:28</div>
+                    </div>
+                </div>
+                
+                <div class="message incoming">
+                    <div class="message-content">
+                        <div class="message-text">Это замечательно! Не забывай отдыхать</div>
+                        <div class="message-time">14:30</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Область ввода сообщения -->
+            <div class="message-input-container">
+                <button class="attach-btn" id="attachBtn">📎</button>
+                <div class="input-wrapper">
+                    <textarea class="message-input" placeholder="Сообщение..." id="messageInput" rows="1"></textarea>
+                    <button class="emoji-btn" id="emojiBtn">😊</button>
+                </div>
+                <button class="send-btn" id="sendBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M2 21l21-9L2 3v7l15 2-15 2v7z" fill="currentColor"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно добавления друга -->
+    <div class="modal" id="addFriendModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Добавить друга</h3>
+                <button class="close-btn" id="closeModalBtn">×</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="friendUsername" placeholder="Имя пользователя" class="modal-input">
+                <input type="text" id="friendCode" placeholder="Код приглашения" class="modal-input">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelBtn">Отмена</button>
+                <button class="btn btn-primary" id="addBtn">Добавить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Уведомления -->
+    <div class="notification" id="notification">
+        <div class="notification-content" id="notificationContent"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
